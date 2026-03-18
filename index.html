@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Group 4 â Yuedpao Mar 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Sarabun',sans-serif;background:#eef2f7;color:#0f172a;}
+
+/* âââââ HEADER âââââ */
+.header{
+  background:linear-gradient(135deg,#0c1929 0%,#162032 60%,#0f2744 100%);
+  border-bottom:3px solid #f59e0b;
+  padding:15px 28px;display:flex;align-items:center;justify-content:space-between;
+}
+.header-left h1{font-size:19px;font-weight:800;color:#ffffff;letter-spacing:.9px;text-transform:uppercase;}
+.header-left p{font-size:10.5px;color:#94a3b8;margin-top:3px;letter-spacing:.2px;}
+.badge-wrap{display:flex;gap:7px;align-items:center;}
+.badge{
+  font-size:10.5px;font-weight:800;padding:4px 13px;border-radius:999px;letter-spacing:.5px;
+  border:1px solid rgba(255,255,255,.12);
+}
+.badge.navy{background:rgba(255,255,255,.1);color:#e2e8f0;}
+.badge.gold{background:#f59e0b;color:#0c1929;}
+.header-right{text-align:right;}
+.header-right .date{font-size:11px;color:#64748b;letter-spacing:.3px;}
+.header-right .cd{font-size:16px;font-weight:800;color:#f59e0b;margin-top:3px;letter-spacing:-.3px;}
+.header-right .cd span{font-size:11px;font-weight:400;color:#94a3b8;}
+
+.main{padding:18px 24px 26px;}
+
+/* âââââ KPI CARDS âââââ */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:14px;}
+.kpi{
+  background:#fff;border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;
+  box-shadow:0 1px 3px rgba(15,23,42,.06),0 4px 16px rgba(15,23,42,.05);
+  border:1px solid rgba(15,23,42,.06);
+}
+.kpi::before{
+  content:'';position:absolute;top:0;left:0;width:5px;height:100%;border-radius:12px 0 0 12px;
+}
+.kpi.c-blue::before{background:linear-gradient(180deg,#1e40af,#3b82f6);}
+.kpi.c-green::before{background:linear-gradient(180deg,#065f46,#059669);}
+.kpi.c-amber::before{background:linear-gradient(180deg,#92400e,#d97706);}
+.kpi.c-red::before{background:linear-gradient(180deg,#991b1b,#dc2626);}
+.kpi-lbl{font-size:9px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.7px;}
+.kpi-val{font-size:25px;font-weight:800;line-height:1.1;margin:6px 0 4px;}
+.kpi-val.c-blue{color:#1e40af;}
+.kpi-val.c-green{color:#065f46;}
+.kpi-val.c-amber{color:#92400e;}
+.kpi-val.c-red{color:#991b1b;}
+.vat-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;}
+.vt{font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:4px;}
+.vt.b{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;}
+.vt.a{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+.kpi-ico{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:30px;opacity:.07;}
+
+/* âââââ STATUS SUMMARY âââââ */
+.status-row{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:14px;}
+.sc{
+  background:#fff;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;
+  box-shadow:0 1px 3px rgba(15,23,42,.06),0 4px 16px rgba(15,23,42,.05);
+  border:1px solid rgba(15,23,42,.06);border-left-width:5px;
+}
+.sc.on{border-left-color:#16a34a;}
+.sc.risk{border-left-color:#d97706;}
+.sc.off{border-left-color:#dc2626;}
+.sc-ico{font-size:24px;opacity:.75;}
+.sc-count{font-size:30px;font-weight:800;line-height:1;}
+.sc.on .sc-count{color:#16a34a;}
+.sc.risk .sc-count{color:#d97706;}
+.sc.off .sc-count{color:#dc2626;}
+.sc-lbl{font-size:12px;font-weight:700;color:#0f172a;margin-top:1px;}
+.sc-desc{font-size:9.5px;color:#94a3b8;margin-top:2px;}
+
+/* âââââ GRID âââââ */
+.row-3{display:grid;grid-template-columns:1.1fr 1.4fr 1fr;gap:13px;margin-bottom:14px;}
+.row-2a{display:grid;grid-template-columns:1.35fr 1fr;gap:13px;margin-bottom:14px;}
+
+/* âââââ CARD âââââ */
+.card{
+  background:#fff;border-radius:12px;padding:17px 19px;
+  box-shadow:0 1px 3px rgba(15,23,42,.06),0 4px 16px rgba(15,23,42,.05);
+  border:1px solid rgba(15,23,42,.06);
+}
+.card-title{
+  font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;
+  letter-spacing:.7px;margin-bottom:13px;display:flex;align-items:center;gap:8px;
+}
+.card-title::before{
+  content:'';display:inline-block;width:3px;height:13px;border-radius:2px;flex-shrink:0;
+}
+.card-title.blue::before{background:linear-gradient(180deg,#1e40af,#60a5fa);}
+.card-title.teal::before{background:linear-gradient(180deg,#0f766e,#2dd4bf);}
+.card-title.purple::before{background:linear-gradient(180deg,#5b21b6,#a78bfa);}
+.card-title.green::before{background:linear-gradient(180deg,#065f46,#34d399);}
+
+/* âââââ VAT SUMMARY BOXES âââââ */
+.vat-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.vbox{border-radius:10px;padding:12px 14px;}
+.vbox.b{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;}
+.vbox.a{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;}
+.vbox-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:5px;}
+.vbox.b .vbox-lbl{color:#1e40af;}
+.vbox.a .vbox-lbl{color:#166534;}
+.vbox-val{font-size:16px;font-weight:800;margin-top:5px;letter-spacing:-.3px;}
+.vbox.b .vbox-val{color:#1e3a8a;}
+.vbox.a .vbox-val{color:#14532d;}
+.vbox-pct{font-size:9px;font-weight:600;margin-top:3px;}
+.vbox.b .vbox-pct{color:#2563eb;}
+.vbox.a .vbox-pct{color:#16a34a;}
+
+/* âââââ DONUT âââââ */
+.donut-wrap{position:relative;width:200px;height:200px;margin:0 auto;}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;}
+.donut-center .big{font-size:30px;font-weight:800;color:#0f172a;line-height:1;}
+.donut-center .sm^font-size:9px;color:#94a3b8;margin-top:4px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
+.legend{margin-top:14px;display:flex;flex-direction:column;gap:9px;}
+.leg-item{display:flex;align-items:center;gap:9px;font-size:12px;}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.leg-name{flex:1;color:#64748b;}
+.leg-val{font-weight:800;color:#0f172a;font-size:12px;}
+
+/* âââââ PROGRESS âââââ */
+.prog-list{display:flex;flex-direction:column;gap:10px;}
+.prog-hdr{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:3px;}
+.prog-name{font-weight:700;color:#0f172a;max-width:185px;white-space:nowraw;overflow:hidden;text-overflow:ellipsis;}
+.prog-tags{display:flex;gap:4px;align-items:center;}
+.prog-sub{display:flex;justify-content:space-between;font-size:9px;color:#64748b;margin-bottom:4px;}
+.prog-bar{height:8px;background:#f1f5f9;border-radius:999px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:999px;transition:width .6s ease;}
+
+/* âââââ TAGS / PILLS âââââ */
+.tag{display:inline-block;padding:1px 7px;border-radius:999px;font-size:9px;font-weight:700;}
+.tag-on{background:#dcfce7;color:#166534;border:1px solid #bbf7d0;}
+.tag-risk{background:#fef3c7;color:#92400e;border:1px solid #fde68a;}
+.tag-off{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;}
+.tag-b{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;}
+.tag-a{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+.tag-gray{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;}
+
+/* âââââ TABLE âââââ */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl thead th{
+  font-size:8.5px;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px;
+  padding:0 6px 9px;border-bottom:2px solid #e2e8f0;text-align:right;white-space:nowrap;font-weight:700;
+}
+.tbl thead th:first-child,.tbl thead th.l{text-align:left;}
+.tbl thead th.hb{color:#1e40af;}
+.tbl thead th.ha{color:#166534;}
+.tbl thead th.ht{color:#0f766e;}
+.tbl thead th.hp{color:#5b21b6;}
+.tbl tbody tr{border-bottom:1px solid #f8fafc;transition:background .12s;}
+.tbl tbody tr:nth-child(even){background:#fafafa;}
+.tbl tbody tr:hover{background:#f0f4f8;}
+.tbl td{padding:7px 6px;font-size:10.5px;color:#334155;text-align:right;vertical-align:middle;white-space:nowrap;}
+.tbl td.l{text-align:left;}
+.rn{
+  width:19px;height:19px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:800;margin-right:5px;
+}
+.rn.g{background:#fef3c7;color:#92400e;}
+.rn.s{background:#f1f5f9;color:#475569;}
+.rn.b{background:#fff7ed;color:#c2410c;}
+.rn.x{background:#f8fafc;color:#94a3b8;}
+.pill{display:inline-block;padding:2px 7px;border-radius:999px;font-size:9px;font-weight:700;}
+.p-g{background:#dcfce7;color:#166534;}.p-b{background:#dbeafe;color:#1e40af;}
+.p-y{background:#fef3c7;color:#92400e;}.p-r{background:#fee2e2;color:#991b1b;}
+.pos{color:#16a34a;font-weight:700;}.neg{color:#dc2626;font-weight:700;}.neu{color:#94a3b8;}
+
+.scrollable{max-height:315px;overflow-y:auto;padding-right:3px;}
+.scrollable::-webkit-scrollbar{width:3px;}
+.scrollable::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px;}
+
+.footer{
+  text-align:center;padding:12px;font-size:9.5px;color:#94a3b8;
+  background:#f8fafc;border-top:1px solid #e2e8f0;margin-top:0;letter-spacing:.2px;
+}
+
+/* âââââ TABS âââââ */
+.tab-nav{
+  background:#fff;border-bottom:2px solid #e2e8f0;
+  padding:0 24px;display:flex;gap:0;
+}
+.tab-btn{
+  background:none;border:none;border-bottom:3px solid transparent;
+  padding:13px 22px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;
+  color:#64748b;cursor:pointer;transition:all .2s;margin-bottom:-2px;
+}
+.tab-btn:hover{color:#1e40af;background:#f8fafc;}
+.tab-btn.active{color:#1e40af;border-bottom-color:#1e40af;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* âââââ STOCK KPI SPECIFIC âââââ */
+.kpi2{
+  background:#fff;border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;
+  box-shadow:0 1px 3px rgba(15,23,42,.06),0 4px 16px rgba(15,23,42,.05);
+  border:1px solid rgba(15,23,42,.06);
+}
+.kpi2::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;border-radius:12px 0 0 12px;}
+.kpi2.c-slate::before{background:linear-gradient(180deg,#334155,#94a3b8);}
+.kpi2.c-rose::before{background:linear-gradient(180deg,#881337,#f43f5e);}
+.kpi2.c-sky::before{background:linear-gradient(180deg,#0c4a6e,#38bdf8);}
+.kpi2-lbl{font-size:9px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.7px;}
+.kpi2-val{font-size:24px;font-weight:800;line-height:1.1;margin:6px 0 3px;}
+.kpi2-val.c-slate{color:#334155;}.kpi2-val.c-rose{color:#881337;}.kpi2-val.c-sky{color:#0c4a6e;}
+.kpi2-sub{font-size:10px;color:#94a3b8;margin-top:2px;}
+.kpi2-ico{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:30px;opacity:.07;}
+
+.sc2{
+  background:#fff;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;
+  box-shadow:0 1px 3px rgba(15,23,42,.06),0 4px 16px rgba(15,23,42,.05);
+  border:1px solid rgba(15,23,42,.06);border-left-width:5px;
+}
+.sc2.pass{border-left-color:#16a34a;}
+.sc2.watch{border-left-color:#d97706;}
+.sc2.fail{border-left-color:#dc2626;}
+.sc2-count{font-size:30px;font-weight:800;line-height:1;}
+.sc2.pass .sc2-count{color:#16a34a;}.sc2.watch .sc2-count{color:#d97706;}.sc2.fail .sc2-count{color:#dc2626;}
+.sc2-lbl{font-size:12px;font-weight:700;color:#0f172a;margin-top:1px;}
+.sc2-desc{font-size:9.5px;color:#94a3b8;margin-top:2px;}
+
+.kpi-gauge{
+  height:10px;background:#f1f5f9;border-radius:999px;overflow:hidden;margin-top:8px;
+}
+.kpi-gauge-fill{height:100%;border-radius:999px;}
+.kpi-line{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:9px;color:#94a3b8;margin-top:3px;
+}
+.stk-pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:700;}
+.stk-pass{background:#dcfce7;color:#166534;border:1px solid #bbf7d0;}
+.stk-watch{background:#fef3c7;color:#92400e;border:1px solid #fde68a;}
+.stk-fail{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;}
+.stk-na{background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0;}
+.row-stk{display:grid;grid-template-columns:1.4fr 1fr;gap:13px;margin-bottom:14px;}
+
+/* âââââ MANAGER STRIP âââââ */
+.mgr-strip{
+  background:linear-gradient(135deg,#0c1929 0%,#0f2744 100%);
+  border-radius:12px;padding:16px 24px;margin-bottom:14px;
+  display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr auto;
+  align-items:center;gap:0;
+  box-shadow:0 4px 20px rgba(15,23,42,.18);
+}
+.mgr-divider{width:1px;height:44px;background:rgba(255,255,255,.12);margin:0 20px;}
+.mgr-item{text-align:center;}
+.mgr-lbl{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#64748b;margin-bottom:4px;}
+.mgr-val{font-size:26px;font-weight:800;line-height:1;letter-spacing:-.5px;}
+.mgr-val.white{color:#fff;}
+.mgr-val.green{color:#4ade80;}
+.mgr-val.amber{color:#fbbf24;}
+.mgr-val.emerald{color:#34d399;}
+.mgr-sub{font-size:9.5px;font-weight:600;margin-top:3px;}
+.mgr-sub.muted{color:#475569;}
+.mgr-sub.green{color:#4ade80;}
+.mgr-sub.amber{color:#fbbf24;}
+.mgr-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 12px;border-radius:999px;font-size:11px;font-weight:800;margin-top:5px;
+}
+.mgr-badge.above{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+.mgr-badge.below{background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
+.mgr-progress{height:5px;background:rgba(255,255,255,.1);border-radius:999px;margin-top:6px;overflow:hidden;}
+.mgr-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#4ade80,#34d399);}
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>ð§ Dashboard Â· Group 4 Â· Yuedpao</h1>
+    <p>à¸¢à¸­à¸à¸à¸²à¸¢ 1râ18 à¸¡à¸µà¸à¸²à¸à¸¡ 2569 &nbsp;Â·&nbsp; 15 à¸ªà¸²à¸à¸² &nbsp;Â·&nbsp; à¸à¹à¸­à¸à¸«à¸±à¸VAT & à¸«à¸¥à¸±à¸à¸«à¸±à¸VAT &nbsp;Â·&nbsp; à¸£à¸²à¸à¹à¸à¸·à¸­à¸ &nbsp;Â·&nbsp; à¸£à¸²à¸¢à¸ªà¸±à¸à¸à¸²à¸«à¹</p>
+  </div>
+  <div class="badge-wrap">
+    <span class="badge navy">GROUP 4</span>
+    <span class="badge gold">MARCH 2026</span>
+  </div>
+  <div class="header-right">
+    <div class="date">ð à¸ à¸§à¸±à¸à¸à¸µà¹ 18 à¸¡à¸µà¸à¸²à¸à¸¡ 2569</div>
+    <div class="cd">â³ à¹à¸«à¸¥à¸·à¸­à¸­à¸µà¸ <b>13 à¸§à¸±à¸</b> <span>&nbsp;(19ã31 à¸¡à¸µ.à¸.)</span></div>
+  </div>
+</div>
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('tab1',this)">ð à¸¢à¸­à¸à¸à¸²à¸¢à¸ªà¸²à¸à¸²</button>
+  <button class="tab-btn" onclick="switchTab('tab2',this)">ð¦ Stock Holding KPI</button>
+</div>
+<div id="tab1" class="tab-pane active">
+<div class="main">
+  <!-- MANAGER SUMMARY STRIP -->
+  <div class="mgr-strip">
+    <div class="mgr-item">
+      <div class="mgr-lbl">ð® Target Group 4 (MAR'26)</div>
+      <div class="mgr-val white">à¸¿16.80M</div>
+      <div class="mgr-sub muted">à¸à¹à¸­à¸à¸«à¸±à¸VAT Â· 15 à¸ªà¸²à¸à¸²</div>
+      <div class="mgr-progress"><div class="mgr-progress-fill" style="width:100%;background:rgba(255,255,255,.2);"></div></div>
+    </div>
+    <div class="mgr-divider"></div>
+    <div class="mgr-item">
+      <div class="mgr-lbl">ð à¸à¸³à¹à¸à¹ 1â18 à¸¡à¸µ.à¸.</div>
+      <div class="mgr-val amber" id="ms-actual">â</div>
+      <div class="mgr-sub amber" id="ms-pct">â</div>
+      <div class="mgr-progress"><div class="mgr-progress-fill" id="ms-bar" style="width:0%;background:linear-gradient(90deg,#fbbf24,#f59e0b);"></div></div>
+    </div>
+    <div class="mgr-divider"></div>
+    <div class="mgr-item" style="text-align:center;">
+      <div class="mgr-lbl">ðª EST à¸ªà¸´à¹à¸à¹à¸à¸·à¸­à¸ (Manager View)</div>
+      <div class="mgr-val green" id="ms-est">â</div>
+      <div id="ms-est-badge">â</div>
+      <div class="mgr-progress"><div class="mgr-progress-fill" id="ms-est-bar" style="width:0%;"></div></div>
+    </div>
+    <div class="mgr-divider"></div>
+    <div class="mgr-item">
+      <div class="mgr-lbl">ð EST vs Target (Î)</div>
+      <div class="mgr-val emerald" id="ms-delta">â</div>
+      <div class="mgr-sub" id="ms-delta-sub" style="color:#34d399;">â</div>
+      <div class="mgr-sub muted" style="margin-top:4px;" id="ms-branches">â</div>
+    </div>
+  </div>
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi c-blue">
+      <div class="kpi-lbl">Target 100% à¸£à¸§à¸¡</div>
+      <div class="kpi-val c-blue">à¸¿16.80M</div>
+      <div class="vat-tags">
+        <span class="vt b">à¸à¹à¸­à¸VAT à¸¿16,799,000</span>
+        <span class="vt a">à¸«à¸¥à¸±à¸VAT à¸¿15,700,000</span>
+      </div>
+      <div class="kpi-ico">ð¯</div>
+    </div>
+    <div class="kpi c-green">
+      <div class="kpi-lbl">à¸¢à¸­à¸à¸à¸²à¸¢ 1râ18 à¸¡à¸µ.à¸.</div>
+      <div class="kpi-val c-green" id="k-actual">à¸¿8.71M</div>
+      <div class="vat-tags">
+        <span class="vt b" id="k-ab">â</span>
+        <span class="vt a" id="k-aa">â</span>
+      </div>
+      <div class="kpi-ico">ð</div>
+    </div>
+    <div class="kpi c-amber">
+      <div class="kpi-lbl">à¸à¸£à¸°à¸¡à¸²à¸à¸à¸²à¸£à¸à¹à¸ªà¸´à¹à¸à¹à¸à¸·à¸­à¸ (EST)</div>
+      <div class="kpi-val c-amber" id="k-est">â</div>
+      <div class="vat-tags">
+        <span class="vt b" id="k-estb">â</span>
+        <span class="vt a" id="k-esta">â</span>
+      </div>
+      <div class="kpi-ico">ð®</div>
+    </div>
+    <div class="kpi c-red">
+      <div class="kpi-lbl">à¸à¹à¸­à¸à¸à¸³à¸à¹à¸­à¸§à¸±à¸ (13 à¸§à¸±à¸à¸à¸µà¹à¹à¸«à¸¥à¸·à¸­)</div>
+      <div class="kpi-val c-red" id="k-pd">â</div>
+      <div class="vat-tags">
+        <span class="vt b" id="k-gapb">â</span>
+        <span class="vt a" id="k-gapa">â</span>
+      </div>
+      <div class="kpi-ico">ð¥</div>
+    </div>
+  </div>
+
+  <!-- STATUS ROW -->
+  <div class="status-row">
+    <div class="sc on">
+      <div class="sc-ico">â</div>
+      <div>
+        <div class="sc-count" id="c-on">â</div>
+        <div class="sc-lbl">On Track</div>
+        <div class="sc-desc">EST â¥ 100% à¸à¸­à¸ Target</div>
+      </div>
+    </div>
+    <div class="sc risk">
+      <div class="sc-ico">â ï¸</div>
+      <div>
+        <div class="sc-count" id="c-risk">â</div>
+        <div class="sc-lbl">At Risk</div>
+        <div class="sc-desc">EST 85â99% à¸à¸­à¸ Target</div>
+      </div>
+    </div>
+    <div class="sc off">
+      <div class="sc-ico">ð´</div>
+      <div>
+        <div class="sc-count" id="c-off">â</div>
+        <div class="sc-lbl">Off Track</div>
+        <div class="sc-desc">EST à¸à¹à¸³à¸à¸§à¹à¸² 85% à¸à¸­à¸ Target</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW: DONUT + BAR + MONTHLY -->
+  <div class="row-3">
+    <div class="card">
+      <div class="card-title blue">à¸ à¸²à¸à¸£à¸§à¸¡ Achievement</div>
+      <div class="vat-summary">
+        <div class="vbox b">
+          <div class="vbox-lbl">ðµ à¸à¹à¸­à¸à¸«à¸±à¸VAT</div>
+          <div class="vbox-val" id="vb-ab">â</div>
+          <div class="vbox-pct" id="vb-pb">â</div>
+        </div>
+        <div class="vbox a">
+          <div class="vbox-lbl">ð¢ à¸«à¸¥à¸±à¸à¸«à¸±à¸VAT</div>
+          <div class="vbox-val" id="vb-aa">â</div>
+          <div class="vbox-pct" id="vb-pa">â</div>
+        </div>
+      </div>
+      <div class="donut-wrap">
+        <canvas id="donutChart"></canvas>
+        <div class="donut-center">
+          <div class="big" id="d-pct">â</div>
+          <div class="sm">à¸à¸³à¹à¸à¹</div>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#1e40af;"></div>
+          <span class="leg-name">à¸¢à¸­à¸à¸à¸²à¸¢ 1â18</span>
+          <span class="leg-val" id="l-a">â</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#e2e8f0;"></div>
+          <span class="leg-name">à¸¢à¸±à¸à¸à¸²à¸</span>
+          <span class="leg-val" style="color:#dc2626;" id="l-g">â</span>
+        </div>
+        <div class="leg-item" style="border-top:1px solid #f1f5f9;padding-top:7px;margin-top:1px;">
+          <div class="leg-dot" style="background:#d97706;"></div>
+          <span class="leg-name">EST à¸ªà¸´à¹à¸à¹à¸à¸·à¸­à¸</span>
+          <span class="leg-val" style="color:#92400e;" id="l-e">â</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title blue">Target vs à¸¢à¸­à¸à¸à¸²à¸¢ vs EST (à¸£à¸²à¸¢à¸ªà¸²à¸à¸²)</div>
+      <canvas id="barChart" height="235"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="card-title teal">à¹à¸à¸£à¸µà¸¢à¸à¹à¸à¸µà¸¢à¸à¸£à¸²à¸¢à¹à¸à¸·à¸­à¸: FEB vs MAR</div>
+      <canvas id="monthlyChart" height="235"></canvas>
+    </div>
+  </div>
+
+  <!-- ROW: PROGRESS + WEEKLY -->
+  <div class="row-2a">
+    <div class="card">
+      <div class="card-title blue">Achievement à¸£à¸²à¸¢à¸ªà¸²à¸à¸² Â· VAT Breakdown Â· Status</div>
+      <div class="prog-list" id="progList"></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div class="card-title" style="color:#334155;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <span style="display:inline-block;width:3px;height:13px;border-radius:2px;background:linear-gradient(180deg,#0f766e,#2dd4bf);flex-shrink:0;"></span>
+        YoY Growth Â· à¸à¸µ 2568 vs 2569 (à¸«à¸¥à¸±à¸à¸«à¸±à¸VAT)
+      </div>
+      <div id="yoySummary" style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px;flex-shrink:0;"></div>
+      <div style="flex:1;position:relative;min-height:0;">
+        <canvas id="yoyChart" style="position:absolute;inset:0;width:100%!important;height:100%!important;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL TABLE -->
+  <div class="card" style="margin-bottom:0;">
+    <div class="card-title green">à¸à¸²à¸£à¸²à¸à¸à¹à¸­à¸¡à¸¹à¸¥à¸£à¸²à¸¢à¸ªà¸²à¸à¸² â à¸à¸£à¸à¸à¸¸à¸ Dimension</div>
+    <div class="scrollable" style="max-height:285px;">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th class="l">à¸ªà¸²à¸à¸²</th>
+            <th class="hb">Target à¸«à¸¥à¸±à¸VAT</th>
+            <th>% à¸à¸³à¹à¸à¹</th>
+            <th class="hb">à¸¢à¸­à¸à¸à¸²à¸¢ à¸à¹à¸­à¸VAT</th>
+            <th class="ha">à¸¢à¸­à¸à¸à¸²à¸¢ à¸«à¸¥à¸±à¸VAT</th>
+            <th class="hb">EST à¸ªà¸´à¹à¸à¹à¸à¸·à¸­à¸</th>
+            <th class="ht">FEB (à¸«à¸¥à¸±à¸VAT)</th>
+            <th class="ht">MAR vs FEB</th>
+            <th class="ht">%à¹à¸à¸¥à¸µà¹à¸¢à¸</th>
+            <th class="hp">W:23à¸.à¸.â1à¸¡à¸µ.</th>
+            <th class="hp">W:2â8 à¸¡à¸µ.</th>
+            <th class="hp">W:9â15 à¸¡à¸µ.</th>
+            <th>YoY</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tblBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div><!-- end tab1 -->
+
+<!-- TAB 2: STOCK HOLDING KPI -->
+<div id="tab2" class="tab-pane">
+<div class="main">
+
+  <!-- STOCK KPI CARDS -->
+  <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);">
+    <div class="kpi2 c-slate">
+      <div class="kpi2-lbl">à¸¡à¸¹à¸¥à¸à¹à¸² Stock à¸£à¸§à¸¡ (MAR'26)</div>
+      <div class="kpi2-val c-slate">à¸¿21.51M</div>
+      <div class="kpi2-sub">99,202 à¸à¸´à¹à¸ Â· AVE SALE à¸£à¸§à¸¡ à¸¿15.49M/à¹à¸à¸·à¸­à¸</div>
+      <div class="kpi2-ico">ð¦</div>
+    </div>
+    <div class="kpi2 c-rose">
+      <div class="kpi2-lbl">Stock Holding à¸£à¸§à¸¡ (MAR'26)</div>
+      <div class="kpi2-val c-rose" id="sk-total">1.46x</div>
+      <div class="kpi2-sub">KPI Target â¤ 1.0x &nbsp;Â·&nbsp; FEB'26: 1.52x &nbsp;Â·&nbsp; Î -0.06</div>
+      <div class="kpi-gauge"><div class="kpi-gauge-fill" style="width:100%;background:linear-gradient(90deg,#16a34a 0%,#16a34a 68%,#d97706 68%,#d97706 100%,#dc2626 100%);"></div></div>
+      <div class="kpi-line"><span>0</span><span style="color:#16a34a;font-weight:700;">KPI=1.0</span><span>2.0+</span></div>
+      <div class="kpi2-ico">ð</div>
+    </div>
+    <div class="kpi2 c-sky">
+      <div class="kpi2-lbl">à¸ªà¸²à¸à¸²à¸à¸µà¹à¸à¹à¸²à¸ KPI (â¤1.0)</div>
+      <div class="kpi2-val c-sky" id="sk-pass-cnt">â</div>
+      <div class="kpi2-sub" id="sk-pass-sub">â</div>
+      <div class="kpi2-ico">â</div>
+    </div>
+  </div>
+
+  <!-- STOCK STATUS CARDS -->
+  <div class="status-row">
+    <div class="sc2 pass">
+      <div class="sc-ico">â</div>
+      <div>
+        <div class="sc2-count" id="sk-c-pass">â</div>
+        <div class="sc2-lbl">à¸à¹à¸²à¸ KPI</div>
+        <div class="sc2-desc">Stock Holding â¤ 1.0x</div>
+      </div>
+    </div>
+    <div class="sc2 watch">
+      <div class="sc-ico">â ï¸</div>
+      <div>
+        <div class="sc2-count" id="sk-c-watch">â</div>
+        <div class="sc2-lbl">à¸à¹à¸­à¸à¸£à¸°à¸§à¸±à¸</div>
+        <div class="sc2-desc">Stock Holding 1.0â1.5x</div>
+      </div>
+    </div>
+    <div class="sc2 fail">
+      <div class="sc-ico">ð´</div>
+      <div>
+        <div class="sc2-count" id="sk-c-fail">â</div>
+        <div class="sc2-lbl">à¹à¸à¸´à¸ KPI</div>
+        <div class="sc2-desc">Stock Holding > 1.5x</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART ROW -->
+  <div class="row-stk">
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div class="card-title teal">Stock Holding MAR'26 à¸£à¸²à¸¢à¸ªà¸²à¸à¸² (KPI â¤ 1.0x)</div>
+      <div style="flex:1;position:relative;min-height:380px;">
+        <canvas id="stkBarChart" style="position:absolute;inset:0;width:100%!important;height:100%!important;"></canvas>
+      </div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div class="card-title blue">FEB vs MAR Holding Â· à¹à¸à¸¥à¸µà¹à¸¢à¸à¹à¸à¸¥à¸ MoM</div>
+      <div style="flex:1;position:relative;min-height:380px;">
+        <canvas id="stkDiftChart" style="position:absolute;inset:0;width:100%!important;height:100%!important;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- STOCK TABLE -->
+  <div class="card" style="margin-bottom:0;">
+    <div class="card-title green">à¸à¸²à¸£à¸²à¸à¸à¹à¸­à¸¡à¸¹à¸¥ Stock Holding à¸£à¸²à¸¢à¸ªà¸²à¸à¸²</div>
+    <div class="scrollable" style="max-height:300px;">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th class="l">à¸ªà¸²à¸à¸²</th>
+            <th>STK QTY</th>
+            <th>à¸¡à¸¹à¸¥à¸à¹à¸² Stock</th>
+            <th>AVE SALE/à¹à¸à¸·à¸­à¸</th>
+            <th class="ht">FEB'26 Holding</th>
+            <th class="ht">MAR'26 Holding</th>
+            <th>Î MoM</th>
+            <th>KPI Status</th>
+          </tr>
+        </thead>
+        <tbody id="stkBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<div class="footer">
+  Yuedpao Â· Group 4 Â· Stock Holding KPI Â· à¸à¹à¸­à¸¡à¸¹à¸¥ Update 18 à¸¡à¸µà¸à¸²à¸à¸¡ 2569 &nbsp;Â·&nbsp;
+  Stock Holding = à¸¡à¸¹à¸¥à¸à¹à¸² Stock Ã· AVE SALE/à¹à¸à¸·à¸­à¸ &nbsp;Â·&nbsp; KPI Target â¤ 1.0x
+</div>
+</div><!-- end tab2 -->
+
+<div class="footer" id="footer1">
+  Yuedpao Â· Group 4 Â· Dashboard March 2026 Â· à¸à¹à¸­à¸¡à¸¹à¸¥ à¸ 18 à¸¡à¸µà¸à¸²à¸à¸¡ 2569 &nbsp;Â·&nbsp;
+  EST = (à¸¢à¸­à¸à¸à¸²à¸¢à¸à¹à¸­à¸VAT 1â18 Ã· 18) Ã 31 â à¸à¸£à¸§à¸à¸ªà¸­à¸à¹à¸¥à¹à¸§ &nbsp;Â·&nbsp;
+  VAT 7% Â· W = à¸ªà¸±à¸à¸à¸²à¸«à¹ (à¸«à¸¥à¸±à¸VAT) Â· FEB = à¸¢à¸­à¸à¸à¸²à¸¢à¹à¸à¹à¸¡à¹à¸à¸·à¸­à¸à¸à¸¸à¸¡à¸ à¸²à¸à¸±à¸à¸à¹
+</div>
+
+<script>
+const REM=13, VAT=1.07;
+const D=[
+  {name:"Central à¸¥à¸²à¸à¸à¸£à¹à¸²à¸§",       sh:"à¸¥à¸²à¸à¸à¸£à¹à¸²à¸§",    tB:2247000,tA:2100000,aB:1355099, aA:1266447,est:2333781,feb:1084119,dift:182328, w1:557450,w2:585443,w3:443055,y24:1084785,y25:1253145},
+  {name:"Future Park (Flagship)",  sh:"Future Park",  tB:2247000,tA:2100000,aB:1358956, aA:1270052,est:2340425,feb:1169535,dift:100517, w1:558634,w2:576645,w3:414932,y24:905252, y25:1109110},
+  {name:"Central à¸à¸¥à¸à¸¸à¸£à¸µ",           sh:"à¸à¸¥à¸à¸¸à¸£à¸µ",       tB:1123500,tA:1050000,aB:716947,  aA:670044, est:1234742,feb:561741, dift:108303, w1:285709,w2:300099,w3:234847,y24:459697, y25:545669},
+  {name:"Central à¸à¸à¸£à¸ªà¸§à¸£à¸£à¸à¹",        sh:"à¸à¸à¸£à¸ªà¸§à¸£à¸£à¸à¹",   tB:1177000,tA:1100000,aB:815715,  aA:762351, est:1404843,feb:519090, dift:243261, w1:262794,w2:348473,w3:227416,y24:465378, y25:527493},
+  {name:"Central à¹à¸à¸µà¸¢à¸à¸£à¸²à¸¢",         sh:"à¹à¸à¸µà¸¢à¸à¸£à¸²à¸¢",    tB:1177000,tA:1100000,aB:617752,  aA:577338, est:1063906,feb:631888, dift:-54550, w1:277848,w2:224165,w3:229964,y24:441430, y25:551164},
+  {name:"Passione à¸£à¸°à¸¢à¸­à¸",          sh:"à¸£à¸°à¸¢à¸­à¸",        tB:802500, tA:750000, aB:405113,  aA:378610, est:697694, feb:408968, dift:-30358, w1:183446,w2:177585,w3:114301,y24:329136, y25:391850},
+  {name:"Robinson à¸¥à¸²à¸à¸à¸£à¸°à¸à¸±à¸",      sh:"à¸¥à¸²à¸à¸à¸£à¸°à¸à¸±à¸",   tB:1177000,tA:1100000,aB:649506,  aA:607015, est:1118594,feb:588661, dift:18354,  w1:294934,w2:292808,w3:202123,y24:418772, y25:491889},
+  {name:"Central à¸¥à¸³à¸à¸²à¸",           sh:"à¸¥à¸³à¸à¸²à¸",        tB:1016500,tA:950000, aB:503828,  aA:470867, est:867704, feb:457096, dift:13771,  w1:221746,w2:206739,w3:171742,y24:428077, y25:505981},
+  {name:"Robinson à¸¡à¸¸à¸à¸à¸²à¸«à¸²à¸£",       sh:"à¸¡à¸¸à¸à¸à¸²à¸«à¸²à¸£",    tB:749000, tA:700000, aB:302628,  aA:282830, est:521193, feb:333910, dift:-51080, w1:140363,w2:133025,w3:105666,y24:287936, y25:339237},
+  {name:"BTS à¸«à¸¡à¸­à¸à¸´à¸",               sh:"BTS à¸«à¸¡à¸­à¸à¸´à¸",  tB:267500, tA:250000, aB:100810,  aA:94215,  est:173617, feb:97370,  dift:-3155,  w1:47533, w2:45879, w3:35589, y24:84507,  y25:104366},
+  {name:"BTS à¸ªà¸¢à¸²à¸¡",                 sh:"BTS à¸ªà¸¢à¸²à¸¡",    tB:321000, tA:300000, aB:149246,  aA:139482, est:257035, feb:113132, dift:26350,  w1:60234, w2:58701, w3:62286, y24:128292, y25:151131},
+  {name:"Robinson à¸ªà¸¡à¸¸à¸à¸£à¸à¸£à¸²à¸à¸²à¸£",    sh:"à¸ªà¸¡à¸¸à¸à¸£à¸à¸£à¸²à¸à¸²à¸£", tB:963000, tA:900000, aB:471453,  aA:440610, est:811947, feb:430280, dift:10330,  w1:231310,w2:182495,w3:159072,y24:0,      y25:0},
+  {name:"Central à¸à¸´à¸©à¸à¸¸à¹à¸¥à¸",        sh:"à¸à¸´à¸©à¸à¸¸à¹à¸¥à¸",    tB:856000, tA:800000, aB:848188,  aA:792699, est:1460768,feb:748133, dift:44566,  w1:381073,w2:393601,w3:275524,y24:699474, y25:794313},
+  {name:"The Mall à¸à¸²à¸¡à¸§à¸à¸¨à¹à¸§à¸²à¸",     sh:"à¸à¸²à¸¡à¸§à¸à¸¨à¹à¸§à¸²à¸",  tB:1712000,tA:1600000,aB:1028114, aA:960855, est:1770642,feb:533647, dift:427208, w1:305384,w2:407154,w3:351188,y24:778588, y25:879400},
+  {name:"Big C à¸£à¸²à¸à¸à¸³à¸£à¸´",            sh:"à¸£à¸²à¸à¸à¸³à¸£à¸´",      tB:963000, tA:900000, aB:465332,  aA:434890, est:801405, feb:415887, dift:19003,  w1:227725,w2:174044,w3:173643,y24:0,      y25:0},
+];
+D.forEach(b=>{
+  b.pct=b.aB/b.tB; b.pctA=b.aA/b.tA;
+  b.gap=b.tB-b.aB; b.gapA=b.tA-b.aA;
+  b.pd=b.gap/REM;  b.pdA=b.gapA/REM;
+  b.estPct=b.est/b.tB; b.estA=b.est/VAT;
+  b.diftPct=b.feb>0?b.dift/b.feb:null;
+  b.yoyPct=b.y24>0?(b.y25-b.y24)/b.y24:null;
+  b.st=b.estPct>=1?'on':b.estPct>=0.85?'risk':'off';
+});
+
+const sTB=D.reduce((s,b)=>s+b.tB,0), sTA=D.reduce((s,b)=>s+b.tA,0);
+const sAB=D.reduce((s,b)=>s+b.aB,0), sAA=D.reduce((s,b)=>s+b.aA,0);
+const sEst=D.reduce((s,b)=>s+b.est,0), sEstA=sEst/VAT;
+const sGap=sTB-sAB, sGapA=sTA-sAA;
+const sFeb=D.reduce((s,b)=>s+b.feb,0), sDift=sAA-sFeb;
+
+function fmt(n){return Math.round(n).toLocaleString('th-TH');}
+function fmtM(n){return'à¸¿'+(n/1e6).toFixed(2)+'M';}
+function fmtK(n){return'à¸¿'+(n/1e3).toFixed(0)+'K';}
+
+// Color by achievement % â refined palette
+function pCol(p){
+  return p>=.9?'#16a34a':p>=.75?'#1d4ed8':p>=.5?'#d97706':'#dc2626';
+}
+function pGrad(p){
+  if(p>=.9) return 'linear-gradient(90deg,#16a34a,#4ade80)';
+  if(p>=.75) return 'linear-gradient(90deg,#1d4ed8,#60a5fa)';
+  if(p>=.5)  return 'linear-gradient(90deg,#d97706,#fbbf24)';
+  return 'linear-gradient(90deg,#dc2626,#f87171)';
+}
+function pillC(p){return p>=.9?'p-g':p>=.75?'p-b':p>=.5?'p-y':'p-r';}
+function stTag(s){
+  return s==='on'
+    ?'<span class="tag tag-on">â On Track</span>'
+    :s==='risk'
+    ?'<span class="tag tag-risk">â ï¸ At Risk</span>'
+    :'<span class="tag tag-off">ð´ Off Track</span>';
+}
+
+// ââ KPIs ââ
+document.getElementById('k-actual').textContent=fmtM(sAB);
+document.getElementById('k-ab').textContent='à¸à¹à¸­à¸VAT '+fmtM(sAB);
+document.getElementById('k-aa').textContent='à¸«à¸¥à¸±à¸VAT '+fmtM(sAA);
+document.getElementById('k-est').textContent=fmtM(sEst);
+document.getElementById('k-estb').textContent='à¸à¹à¸­à¸VAT '+fmtM(sEst);
+document.getElementById('k-esta').textContent='à¸«à¸¥à¸±à¸VAT '+fmtM(sEstA);
+document.getElementById('k-pd').textContent=fmtK(sGap/REM);
+document.getElementById('k-gapb').textContent='à¸à¸²à¸ à¸à¹à¸­à¸VAT '+fmtM(sGap);
+document.getElementById('k-gapa').textContent='à¸à¸²à¸ à¸«à¸¥à¸±à¸VAT '+fmtM(sGapA);
+
+// ââ Status counts ââ
+document.getElementById('c-on').textContent=D.filter(b=>b.st==='on').length+' à¸ªà¸²à¸à¸²';
+document.getElementById('c-risk').textContent=D.filter(b=>b.st==='risk').length+' à¸ªà¸²à¸à¸²';
+document.getElementById('c-off').textContent=D.filter(b=>b.st==='off').length+' à¸ªà¸²à¸à¸²';
+
+// ââ Manager Strip ââ
+const pctB=sAB/sTB;
+const estPctG=sEst/sTB;
+const msDelta=sEst-sTB;
+const onCnt=D.filter(b=>b.st==='on').length;
+const riskCnt=D.filter(b=>b.st==='risk').length;
+const offCnt=D.filter(b=>b.st==='off').length;
+document.getElementById('ms-actual').textContent=fmtM(sAB);
+document.getElementById('ms-pct').textContent=(pctB*100).toFixed(1)+'% à¸à¸­à¸ Target à¸à¹à¸­à¸VAT';
+document.getElementById('ms-bar').style.width=Math.min(pctB*100,100)+'%';
+document.getElementById('ms-est').textContent=fmtM(sEst);
+(function(){
+  const eb=document.getElementById('ms-est-badge');
+  const epct=(estPctG*100).toFixed(1);
+  const cls=estPctG>=1?'tag tag-on':estPctG>=0.85?'tag tag-risk':'tag tag-off';
+  const ico=estPctG>=1?'â':estPctG>=0.85?'â ï¸':'ð´';
+  eb.innerHTML='<span class="'+cls+'">'+ico+' EST '+epct+'% à¸à¸­à¸ Target</span>';
+})();
+document.getElementById('ms-est-bar').style.width=Math.min(estPctG*100,100)+'%';
+document.getElementById('ms-est-bar').style.background=estPctG>=1?'linear-gradient(90deg,#16a34a,#4ade80)':estPctG>=0.85?'linear-gradient(90deg,#d97706,#fbbf24)':'linear-gradient(90deg,#dc2626,#f87171)';
+document.getElementById('ms-delta').textContent=(msDelta>=0?'+':'')+fmtM(msDelta);
+document.getElementById('ms-delta-sub').textContent=(msDelta>=0?'+':'')+(msDelta/sTB*100).toFixed(1)+'% vs Target 100%';
+document.getElementById('ms-branches').textContent='â On '+onCnt+' Â· â ï¸ Risk '+riskCnt+' Â· ð´ Off '+offCnt;
+
+// ââ Donut label & legend ââ
+document.getElementById('d-pct').textContent=(pctB*100).toFixed(1)+'%';
+document.getElementById('l-a').textContent=fmtM(sAB);
+document.getElementById('l-g').textContent='à¸¿'+fmt(sGap);
+document.getElementById('l-e').textContent=fmtM(sEst);
+
+// ââ VAT boxes ââ
+document.getElementById('vb-ab').textContent='à¸¿'+fmt(sAB);
+document.getElementById('vb-aa').textContent='à¸¿'+fmt(sAA);
+document.getElementById('vb-pb').textContent=(pctB*100).toFixed(1)+'% à¸à¸­à¸ Target à¸à¹à¸­à¸VAT';
+document.getElementById('vb-pa').textContent=((sAA/sTA)*100).toFixed(1)+'% à¸à¸­à¸ Target à¸«à¸¥à¸±à¸VAT';
+
+// ââ DONUT ââ
+new Chart(document.getElementById('donutChart'),{
+  type:'doughnut',
+  data:{datasets:[{
+    data:[sAB,sGap],
+    backgroundColor:['#1d4ed8','#e2e8f0'],
+    borderWidth:0, hoverOffset:6
+  }]},
+  options:{
+    cutout:'73%',
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataIndex===0?` à¸à¸³à¹à¸à¹ à¸¿${fmt(c.raw)}`:`à¸à¸²à¸ à¸¿${fmt(c.raw)}`}}},
+    animation:{animateRotate:true,duration:1000}
+  }
+});
+
+// ââ BAR (Target / Actual / EST) ââ
+const bs=[...D].sort((a,b)=>b.pct-a.pct);
+new Chart(document.getElementById('barChart'),{
+  type:'bar',
+  data:{
+    labels:bs.map(b=>b.sh),
+    datasets:[
+      {label:'Target 100%', data:bs.map(b=>b.tB), backgroundColor:'rgba(203,213,225,.3)', borderColor:'rgba(148,163,184,.7)', borderWidth:1, borderRadius:3, borderSkipped:false},
+      {label:'à¸¢à¸­à¸à¸à¸²à¸¢ à¸à¹à¸­à¸VAT', data:bs.map(b=>b.aB), backgroundColor:bs.map(b=>pCol(b.pct)+'cc'), borderColor:bs.map(b=>pCol(b.pct)), borderWidth:1.2, borderRadius:3, borderSkipped:false},
+      {label:'à¸¢à¸­à¸à¸à¸²à¸¢ à¸«à¸¥à¸±à¸VAT', data:bs.map(b=>b.aA), backgroundColor:'rgba(16,163,127,.18)', borderColor:'rgba(16,163,127,.7)', borderWidth:1, borderRadius:3, borderSkipped:false},
+      {label:'EST à¸ªà¸´à¹à¸à¹à¸à¸·à¸­à¸', data:bs.map(b=>b.est), backgroundColor:'rgba(217,119,6,.1)', borderColor:'rgba(217,119,6,.85)', borderWidth:1.5, borderRadius:3, borderSkipped:false},
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{labels:{color:'#64748b',font:{size:9},boxWidth:10,padding:10}},
+      tooltip:{callbacks:{label:c=>` ${c.dataset.label}: à¸¿${fmt(c.raw)}`}}
+    },
+    scales:{
+      x:{ticks:{color:'#94a3b8',font:{size:8.5},maxRotation:38},grid:{color:'rgba(241,245,249,.8)'},border:{display:false}},
+      y:{ticks:{color:'#94a3b8',font:{size:8.5},callback:v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v},grid:{color:'rgba(241,245,249,.8)'},border:{display:false}}
+    }
+  }
+});
+
+// ââ MONTHLY CHART ââ
+const ms=[...D].sort((a,b)=>b.dift-a.dift);
+new Chart(document.getElementById('monthlyChart'),{
+  type:'bar',
+  data:{
+    labels:ms.map(b=>b.sh),
+    datasets:[
+      {label:'FEB (à¸«à¸¥à¸±à¸VAT)', data:ms.map(b=>b.feb), backgroundColor:'rgba(100,116,139,.25)', borderColor:'rgba(100,116,139,.55)', borderWidth:1, borderRadius:3, borderSkipped:false},
+      {label:'MAR 1-18 (à¸«à¸¥à¸±à¸VAT)', data:ms.map(b=>b.aA), backgroundColor:ms.map(b=>b.dift>=0?'rgba(15,118,110,.6)':'rgba(220,38,38,.45)'), borderColor:ms.map(b=>b.dift>=0?'#0f766e':'#dc2626'), borderWidth:1.2, borderRadius:3, borderSkipped:false},
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{labels:{color:'#64748b',font:{size:9},boxWidth:10,padding:10}},
+      tooltip:{callbacks:{label:c=>` ${c.dataset.label}: à¸¿${fmt(c.raw)}`}}
+    },
+    scales:{
+      x:{ticks:{color:'#94a3b8',font:{size:8.5},maxRotation:38},grid:{color:'rgba(241,245,249,.8)'},border:{display:false}},
+      y:{ticks:{color:'#94a3b8',font:{size:8.5},callback:v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v},grid:{color:'rgba(241,245,249,.8)'},border:{display:false}}
+    }
+  }
+});
+
+// ââ YoY GROWTH CHART ââ
+const yoySorted=[...D].filter(b=>b.yoyPct!==null).sort((a,b)=>b.yoyPct-a.yoyPct);
+const yoyNew=[...D].filter(b=>b.yoyPct===null);
+const yoyAll=[...yoySorted,...yoyNew];
+
+// Summary cards
+const growCount=yoySorted.filter(b=>b.yoyPct>0).length;
+const decCount=yoySorted.filter(b=>b.yoyPct<=0).length;
+const avgYoy=yoySorted.reduce((s,b)=>s+b.yoyPct,0)/yoySorted.length;
+const best=yoySorted[0], worst=yoySorted[yoySorted.length-1];
+const ys=document.getElementById('yoySummary');
+function yoyBox(label,val,sub,c){
+  return`<div style="background:${c};border-radius:9px;padding:9px 11px;">
+    <div style="font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#64748b;">${label}</div>
+    <div style="font-size:18px;font-weight:800;color:#0f172a;margin:3px 0 1px;line-height:1;">${val}</div>
+    <div style="font-size:8.5px;color:#64748b;">${sub}</div>
+  </div>`;
+}
+ys.innerHTML=
+  yoyBox('à¹à¸à¸¥à¸µà¹à¸¢ YoY',(avgYoy>=0?'+':'')+( avgYoy*100).toFixed(1)+'%','à¸à¸±à¹à¸ '+yoySorted.length+' à¸ªà¸²à¸à¸² (à¹à¸¡à¹à¸£à¸§à¸¡ New)','#f8fafc')+
+  yoyBox('ð à¹à¸à¸´à¸à¹à¸',growCount+' à¸ªà¸²à¸à¸²',best.sh+' +'+( best.yoyPct*100).toFixed(1)+'%','#f0fdf4')+
+  yoyBox('ð à¸¥à¸à¸¥à¸',decCount+' à¸ªà¸²à¸à¸²',worst.sh+' '+(worst.yoyPct*100).toFixed(1)+'%','#fff1f2');
+
+new Chart(document.getElementById('yoyChart'),{
+  type:'bar',
+  data:{
+    labels:yoyAll.map(b=>b.sh),
+    datasets:[{
+      label:'YoY Growth %',
+      data:yoyAll.map(b=>b.yoyPct!==null?+(b.yoyPct*100).toFixed(1):0),
+      backgroundColor:yoyAll.map(b=>b.yoyPct===null?'rgba(148,163,184,.35)':b.yoyPct>0?'rgba(22,163,74,.7)':'rgba(220,38,38,.65)'),
+      borderColor:yoyAll.map(b=>b.yoyPct===null?'#94a3b8':b.yoyPct>0?'#16a34a':'#dc2626'),
+      borderWidth:1.5,borderRadius:5,borderSkipped:false,
+    }]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        callbacks:{
+          title:ctx=>{const b=yoyAll[ctx[0].dataIndex];return b.name;},
+          label:ctx=>{
+            const b=yoyAll[ctx.dataIndex];
+            if(b.yoyPct===null) return[' à¸ªà¸²à¸à¸²à¹à¸«à¸¡à¹ (New Store)',' à¸¢à¸­à¸à¸à¸²à¸¢ MAR 1-18: à¸¿'+fmt(b.aA)];
+            const s=b.yoyPct>=0?'+':'';
+            return[
+              ` YoY: ${s}${(b.yoyPct*100).toFixed(1)}%`,
+              ` à¸à¸µ 2568: à¸¿${fmt(b.y24)}`,
+              ` à¸à¸µ 2569: à¸¿${fmt(b.y25)}`,
+              ` à¹à¸à¸¥à¸µà¹à¸¢à¸: ${b.y25-b.y24>=0?'+':''}à¸¿${fmt(b.y25-b.y24)}`
+            ];
+          }
+        }
+      }
+    },
+    scales:{
+      x:{
+        ticks:{color:'#94a3b8',font:{size:9},callback:v=>v+'%'},
+        grid:{color:ctx=>ctx.tick.value===0?'rgba(15,23,42,.2)':'rgba(241,245,249,.9)',
+              lineWidth:ctx=>ctx.tick.value===0?2:1},
+        border:{display:false}
+      },
+      y:{
+        ticks:{color:'#334155',font:{size:9.5,weight:'600'}},
+        grid:{display:false},border:{display:false}
+      }
+    }
+  }
+});
+
+// ââ PROGRESS BARS ââ
+const ps=[...D].sort((a,b)=>b.pct-a.pct);
+const pl=document.getElementById('progList');
+ps.forEach(b=>{
+  const p=(b.pct*100).toFixed(1)+'%';
+  const ep=(b.estPct*100).toFixed(0)+'%';
+  const dp=b.diftPct!==null?(b.diftPct>=0?'+':'')+(b.diftPct*100).toFixed(1)+'%':'New';
+  const dc=b.diftPct===null?'neu':b.diftPct>=0?'pos':'neg';
+
+  // Daily need â negative gap means already exceeded target
+  const exceeded=b.gap<=0;
+  let dailyHtml;
+  if(exceeded){
+    dailyHtml=`<span style="display:inline-flex;align-items:center;gap:4px;background:#dcfce7;border:1px solid #bbf7d0;border-radius:6px;padding:2px 8px;font-size:9px;font-weight:700;color:#166534;">
+      â à¹à¸à¸´à¸ Target à¹à¸¥à¹à¸§ &nbsp;+à¸¿${fmt(Math.abs(b.gap))} (à¸à¹à¸­à¸VAT)
+    </span>`;
+  } else {
+    dailyHtml=`<span style="display:inline-flex;align-items:center;gap:4px;background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:2px 8px;font-size:9px;font-weight:700;color:#92400e;">
+      ð¯ à¸à¹à¸­à¸à¸à¸³/à¸§à¸±à¸ &nbsp;<span style="color:#1e40af;">à¸à¹à¸­à¸VAT à¸¿${fmt(b.pd)}</span>&nbsp;|&nbsp;<span style="color:#166534;">à¸«à¸¥à¸±à¸VAT à¸¿${fmt(b.pdA)}</span>&nbsp;<span style="font-weight:500;color:#94a3b8;">(${REM} à¸§à¸±à¸à¸à¸µà¹à¹à¸«à¸¥à¸·à¸­ Â· à¸à¸²à¸ à¸¿${fmt(b.gap)})</span>
+    </span>`;
+  }
+
+  pl.innerHTML+=`<div>
+    <div class="prog-hdr">
+      <span class="prog-name">${b.name}</span>
+      <div class="prog-tags">${stTag(b.st)}<span style="font-weight:800;font-size:11px;color:${pCol(b.pct)};margin-left:4px;">${p}</span></div>
+    </div>
+    <div class="prog-sub">
+      <div><span class="tag tag-b">à¸à¹à¸­à¸VAT</span> Target à¸¿${fmt(b.tB)} Â· à¸à¸³ à¸¿${fmt(b.aB)}</div>
+      <div><span class="tag tag-a">à¸«à¸¥à¸±à¸VAT</span> Target à¸¿${fmt(b.tA)} Â· à¸à¸³ à¸¿${fmt(b.aA)} &nbsp;|&nbsp; <span class="tag tag-gray">EST ${ep}</span> &nbsp;|&nbsp; MAR vs FEB <span class="${dc}">${dp}</span></div>
+    </div>
+    <div class="prog-bar" style="margin-bottom:5px;">
+      <div class="prog-fill" style="width:${Math.min(b.pct*100,100)}%;background:${pGrad(b.pct)};"></div>
+    </div>
+    <div>${dailyHtml}</div>
+  </div>`;
+});
+
+// ââ TABLE ââ
+const ts=[...D].sort((a,b)=>b.pct-a.pct);
+const tb=document.getElementById('tblBody');
+ts.forEach((b,i)=>{
+  const rk=i+1;
+  const nc=rk===1?'g':rk===2?'s':rk===3?'b':'x';
+  const p=(b.pct*100).toFixed(1)+'%';
+  const dp=b.diftPct!==null?(b.diftPct>=0?'+':'')+(b.diftPct*100).toFixed(1)+'%':'New';
+  const dpc=b.diftPct===null?'neu':b.diftPct>=0?'pos':'neg';
+  const yy=b.yoyPct!==null?(b.yoyPct>=0?'+':'')+(b.yoyPct*100).toFixed(1)+'%':'New';
+  const yyc=b.yoyPct===null?'neu':b.yoyPct>=0?'pos':'neg';
+  const diftAmt=b.dift>=0?'+'+fmt(b.dift):'-'+fmt(Math.abs(b.dift));
+  tb.innerHTML+=`<tr>
+    <td class="l"><span class="rn ${nc}">${rk}</span>${b.sh}</td>
+    <td style="color:#1e3a8a;font-weight:700;">à¸¿${fmt(b.tA)}</td>
+    <td><span class="pill ${pillC(b.pct)}">${p}</span></td>
+    <td style="color:#1d4ed8;font-weight:600;">à¸¿${fmt(b.aB)}</td>
+    <td style="color:#166534;font-weight:600;">à¸¿${fmt(b.aA)}</td>
+    <td style="color:#92400e;font-weight:600;">à¸¿${fmt(b.est)}</td>
+    <td style="color:#0f766e;font-weight:600;">à¸¿${fmt(b.feb)}</td>
+    <td class="${b.dift>=0?'pos':'neg'}">${diftAmt}</td>
+    <td class="${dpc}">${dp}</td>
+    <td style="color:#4338ca;font-weight:600;">à¸¿${fmt(b.w1)}</td>
+    <td style="color:#6d28d9;font-weight:600;">à¸¿${fmt(b.w2)}</td>
+    <td style="color:#7c3aed;font-weight:600;">à¸¿${fmt(b.w3)}</td>
+    <td class="${yyc}">${yy}</td>
+    <td>${stTag(b.st)}</td>
+  </tr>`;
+});
+
+// ââ TAB SWITCHING ââ
+let stkChartsInit=false;
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  // Show/hide matching footer
+  document.getElementById('footer1').style.display=id==='tab1'?'block':'none';
+  if(id==='tab2'&&!stkChartsInit){initStkCharts();stkChartsInit=true;}
+}
+document.getElementById('footer1').style.display='block';
+
+// ââ STOCK HOLDING DATA ââ
+const KPI=1.0;
+const SD=[
+  {name:"Central à¸¥à¸²à¸à¸à¸£à¹à¸²à¸§",       sh:"à¸¥à¸²à¸à¸à¸£à¹à¸²à¸§",    qty:5212,  val:1264130, ave:1900000, feb:0.8,  mar:0.7,  dift:-0.1},
+  {name:"The Mall à¸à¸²à¸¡à¸§à¸à¸¨à¹à¸§à¸²à¸",    sh:"à¸à¸²à¸¡à¸§à¸à¸¨à¹à¸§à¸²à¸",  qty:7730,  val:1813274, ave:1300000, feb:1.1,  mar:1.4,  dift:0.3},
+  {name:"Central à¸à¸´à¸©à¸à¸¸à¹à¸¥à¸",       sh:"à¸à¸´à¸©à¸à¸¸à¹à¸¥à¸",    qty:null,  val:null,    ave:1200000, feb:1.4,  mar:null, dift:null},
+  {name:"Passione à¸£à¸°à¸¢à¸­à¸",         sh:"à¸£à¸°à¸¢à¸­à¸",        qty:8334,  val:1853945, ave:900000,  feb:2.0,  mar:2.1,  dift:0.1},
+  {name:"Central à¸¥à¸³à¸à¸²à¸",          sh:"à¸¥à¸³à¸à¸²à¸",        qty:8078,  val:1871546, ave:850000,  feb:2.1,  mar:2.2,  dift:0.1},
+  {name:"Future Park (Flagship)",  sh:"Future Park",  qty:14198, val:3121401, ave:1900000, feb:1.7,  mar:1.6,  dift:-0.1},
+  {name:"Central à¹à¸à¸µà¸¢à¸à¸£à¸²à¸¢",       sh:"à¹à¸à¸µà¸¢à¸à¸£à¸²à¸¢",    qty:8003,  val:1720600, ave:950000,  feb:1.6,  mar:1.8,  dift:0.2},
+  {name:"Central à¸à¸¥à¸à¸¸à¸£à¸µ",         sh:"à¸à¸¥à¸à¸¸à¸£à¸µ",      qty:8236,  val:1906225, ave:1040000, feb:1.7,  mar:1.8,  dift:0.1},
+  {name:"BTS à¸«à¸¡à¸­à¸à¸´à¸",             sh:"BTS à¸«à¸¡à¸­à¸à¸´à¸",  qty:1148,  val:271850,  ave:250000,  feb:1.1,  mar:1.1,  dift:0.0},
+  {name:"BTS à¸ªà¸¢à¸²à¸¡",               sh:"BTS à¸ªà¸¢à¸²à¸¡",    qty:1847,  val:435290,  ave:250000,  feb:1.8,  mar:1.7,  dift:-0.1},
+  {name:"Central à¸à¸à¸£à¸ªà¸§à¸£à¸£à¸à¹",      sh:"à¸à¸à¸£à¸ªà¸§à¸£à¸£à¸à¹",   qty:13572, val:2241320, ave:1000000, feb:2.0,  mar:2.2,  dift:0.2},
+  {name:"Robinson à¸¥à¸²à¸à¸à¸£à¸°à¸à¸±à¸",     sh:"à¸¥à¸²à¸à¸à¸£à¸°à¸à¸±à¸",  qty:5576,  val:1229895, ave:900000,  feb:1.4,  mar:1.4,  dift:0.0},
+  {name:"Robinson à¸¡à¸¸à¸à¸à¸²à¸«à¸²à¸£",      sh:"à¸¡à¸¸à¸à¸à¸²à¸«à¸²à¸£",   qty:4426,  val:984625,  ave:675000,  feb:1.6,  mar:1.5,  dift:-0.1},
+  {name:"Robinson à¸ªà¸¡à¸¸à¸à¸£à¸à¸£à¸²à¸à¸²à¸£",   sh:"à¸ªà¸¡à¸¸à¸à¸£à¸à¸£à¸²à¸à¸²à¸£", qty:5695,  val:1260294, ave:1300000, feb:1.0,  mar:1.0,  dift:0.0},
+  {name:"Big C à¸£à¸²à¸à¸à¸³à¸£à¸´",          sh:"à¸£à¸²à¸à¸à¸³à¸£à¸´",     qty:7147,  val:1532015, ave:1070000, feb:1.4,  mar:1.4,  dift:0.0},
+];
+SD.forEach(b=>{
+  b.st=b.mar===null?'na':b.mar<=KPI?'pass':b.mar<=1.5?'watch':'fail';
+});
+
+function stkTag(s){
+  return s==='pass'?'<span class="stk-pill stk-pass">â à¸à¹à¸²à¸ KPI</span>'
+        :s==='watch'?'<span class="stk-pill stk-watch">â ï¸ à¸à¹à¸­à¸à¸£à¸°à¸§à¸±à¸</span>'
+        :s==='fail'?'<span class="stk-pill stk-fail">ð´ à¹à¸à¸´à¸ KPI</span>'
+        :'<span class="stk-pill stk-na">â à¹à¸¡à¹à¸¡à¸µà¸à¹à¸­à¸¡à¸¹à¸¥</span>';
+}
+
+// Counts
+const passCount=SD.filter(b=>b.st==='pass').length;
+const watchCount=SD.filter(b=>b.st==='watch').length;
+const failCount=SD.filter(b=>b.st==='fail').length;
+document.getElementById('sk-c-pass').textContent=passCount+' à¸ªà¸²à¸à¸²';
+document.getElementById('sk-c-watch').textContent=watchCount+' à¸ªà¸²à¸à¸²';
+document.getElementById('sk-c-fail').textContent=failCount+' à¸ªà¸²à¸à¸²';
+document.getElementById('sk-pass-cnt').textContent=passCount+' / 15 à¸ªà¸²à¸à¸²';
+document.getElementById('sk-past-sub').textContent=
+  (failCount+watchCount)+' à¸ªà¸²à¸à¸² à¸¢à¸±à¸à¸à¹à¸­à¸à¸¥à¸ Stock Â· '+failCount+' à¸ªà¸²à¸à¸² à¹à¸à¸´à¸ KPI à¸­à¸¢à¹à¸²à¸à¸¡à¸µà¸à¸±à¸¢à¸ªà¸³à¸à¸±à¸';
+
+// ââ STOCK CHARTS (lazy init on tab open) ââ
+function initStkCharts(){
+
+  // Bar chart: MAR'26 holding sorted descending
+  const bs2=[...SD].filter(b=>b.mar!==null).sort((a,b)=>b.mar-a.mar);
+  const naRows=SD.filter(b=>b.mar===null);
+  const allBar=[...bs2,...naRows];
+
+  function stkBg(s,a){
+    return s==='pass'?`rgba(22,163,74,${a})`:s==='watch'?`rgba(217,119,6,${a})`:s==='fail'?`rgba(220,38,38,${a})`:`rgba(148,163,184,${a})`;
+  }
+  function stkBorder(s){
+    return s==='pass'?'#16a34a':s==='watch'?'#d97706':s==='fail'?'#dc2626':'#94a3b8';
+  }
+
+  new Chart(document.getElementById('stkBarChart'),{
+    type:'bar',
+    data:{
+      labels:allBar.map(b=>b.sh),
+      datasets:[{
+        label:'MAR\'26 Holding',
+        data:allBar.map(b=>b.mar??0),
+        backgroundColor:allBar.map(b=>stkBg(b.st,.65)),
+        borderColor:allBar.map(b=>stkBorder(b.st)),
+        borderWidth:1.5,borderRadius:5,borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        annotation:{annotations:{kpiLine:{type:'line',xMin:1,xMax:1,borderColor:'rgba(15,23,42,.5)',borderWidth:2,borderDash:[5,3],label:{display:true,content:'KPI=1.0',position:'end',font:{size:9,weight:'bold'},color:'#0f172a',backgroundColor:'rgba(255,255,255,.8)',padding:3}}}},
+        tooltip:{callbacks:{
+          title:ctx=>{const b=allBar[ctx[0].dataIndex];return b.name;},
+          label:ctx=>{
+            const b=allBar[ctx.dataIndex];
+            if(b.mar===null) return[' à¹à¸¡à¹à¸¡à¸µà¸à¹à¸­à¸¡à¸¹à¸¥ MAR\'26'];
+            return[
+              ` Holding: ${b.mar.toFixed(1)}x  (KPI â¤${KPI}x)`,
+              ` à¸¡à¸¹à¸¥à¸à¹à¸² Stock: à¸¿${fmt(b.val)}`,
+              ` AVE SALE: à¸¿${fmt(b.ave)}/à¹à¸à¸·à¸­à¸`,
+              ` DIFT vs FEB: ${b.dift>=0?'+':''}${b.dift.toFixed(1)}`
+            ];
+          }
+        }}
+      },
+      scales:{
+        x:{
+          min:0,max:2.6,
+          ticks:{color:'#94a3b8',font:{size:9},callback:v=>v+'x'},
+          grid:{color:ctx=>ctx.tick.value===1.0?'rgba(15,23,42,.2)':'rgba(241,245,249,.9)',
+                lineWidth:ctx=>ctx.tick.value===1.0?2:1},
+          border:{display:false}
+        },
+        y:{ticks:{color:'#334155',font:{size:9.5,weight:'600'}},grid:{display:false},border:{display:false}}
+      }
+    }
+  });
+
+  // Dift chart: FEB vs MAR grouped bar, sorted by MAR holding
+  const ds2=[...SD].filter(b=>b.mar!==null).sort((a,b)=>b.mar-a.mar);
+  new Chart(document.getElementById('stkDiftChart'),{
+    type:'bar',
+    data:{
+      labels:ds2.map(b=>b.sh),
+      datasets:[
+        {label:"FEB'26",data:ds2.map(b=>b.feb),backgroundColor:'rgba(100,116,139,.3)',borderColor:'rgba(100,116,139,.6)',borderWidth:1.2,borderRadius:4,borderSkipped:false},
+        {label:"MAR'26",data:ds2.map(b=>b.mar),backgroundColor:ds2.map(b=>stkBg(b.st,.65)),borderColor:ds2.map(b=>stkBorder(b.st)),borderWidth:1.5,borderRadius:4,borderSkipped:false},
+      ]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{labels:{color:'#64748b',font:{size:9},boxWidth:10,padding:10}},
+        tooltip:{callbacks:{
+          title:ctx=>{const b=ds2[ctx[0].dataIndex];return b.name;},
+          label:ctx=>{
+            const b=ds2[ctx.dataIndex];
+            const d=ctx.datasetIndex===0?'FEB\'26':'MAR\'26';
+            const v=ctx.datasetIndex===0?b.feb:b.mar;
+            return` ${d}: ${v.toFixed(1)}x`+(ctx.datasetIndex===1?`  (Î ${b.dift>=0?'+':''}${b.dift.toFixed(1)})`:' ');
+          }
+        }}
+      },
+      scales:{
+        x:{min:0,max:2.6,
+          ticks:{color:'#94a3b8',font:{size:9},callback:v=>v+'x'},
+          grid:{color:ctx=>ctx.tick.value===1.0?'rgba(15,23,42,.2)':'rgba(241,245,249,.9)',
+                lineWidth:ctx=>ctx.tick.value===1.0?2:1},
+          border:{display:false}},
+        y:{ticks:{color:'#334155',font:{size:9.5,weight:'600'}},grid:{display:false},border:{display:false}}
+      }
+    }
+  });
+
+  // Table
+  const stbl=document.getElementById('stkBody');
+  const ts2=[...SD].sort((a,b)=>{
+    if(a.mar===null)return 1;if(b.mar===null)return-1;return b.mar-a.mar;
+  });
+  ts2.forEach((b,i)=>{
+    const diftStr=b.dift!==null?(b.dift>=0?'+':'')+b.dift.toFixed(1)+'x':'â';
+    const diftC=b.dift===null?'neu':b.dift>0?'neg':'pos';
+    stbl.innerHTML+=`<tr>
+      <td class="l"><span class="rn x">${i+1}</span>${b.sh}</td>
+      <td style="color:#334155;font-weight:600;">${b.qty!==null?fmt(b.qty):'â'}</td>
+      <td style="color:#1e3a8a;font-weight:700;">${b.val!==null?'à¸¿'+fmt(b.val):'â'}</td>
+      <td style="color:#0f766e;font-weight:600;">à¸¿${fmt(b.ave)}</td>
+      <td style="color:#64748b;font-weight:600;text-align:center;">${b.feb!==null?b.feb.toFixed(1)+'x':'â'}</td>
+      <td style="text-align:center;font-weight:800;color:${b.mar===null?'#94a3b8':b.st==='pass'?'#16a34a':b.st==='watch'?'#d97706':'#dc2626'};">${b.mar!==null?b.mar.toFixed(1)+'x':'â'}</td>
+      <td class="${diftC}" style="text-align:center;">${diftStr}</td>
+      <td style="text-align:center;">${stkTag(b.st)}</td>
+    </tr>`;
+  });
+}
+</script>
+</body>
+</html>
