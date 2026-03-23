@@ -743,7 +743,7 @@ const sEst=D.reduce((s,b)=>s+b.est,0), sEstA=sEst/VAT;
 const sGap=sTB-sAB, sGapA=sTA-sAA;
 const sFeb=D.reduce((s,b)=>s+b.feb,0), sDift=sAA-sFeb;
 
-function fmt(n){return Math.round(n).toLocaleString('th-TH');}
+function fmt(n){return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmtM(n){return'฿'+(n/1e6).toFixed(2)+'M';}
 function fmtK(n){return'฿'+(n/1e3).toFixed(0)+'K';}
 
