@@ -1367,6 +1367,18 @@ function initStkCharts(){
   });
 }
 </script>
+
+<script>
+// Fix Survey tab4 - move out of tab2 to root level
+(function(){
+  var t4 = document.getElementById('tab4');
+  var t2 = document.getElementById('tab2');
+  if (t4 && t2 && t4.parentElement === t2) {
+    // Move tab4 to be a sibling after tab2
+    t2.parentNode.insertBefore(t4, t2.nextSibling);
+  }
+})();
+</script>
 </body>
 </html>
 
