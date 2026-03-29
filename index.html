@@ -296,7 +296,7 @@ body{font-family:'Sarabun',sans-serif;background:#eef2f7;color:#0f172a;}
 <div class="header">
   <div class="header-left">
     <h1>👕 Dashboard · Group 4 · Yuedpao</h1>
-    <p>ยอดขาย 1–22 มีนาคม 2569 &nbsp;·&nbsp; 15 สาขา &nbsp;·&nbsp; ก่อนหักVAT & หลังหักVAT &nbsp;·&nbsp; รายเดือน &nbsp;·&nbsp; รายสัปดาห์</p>
+    <p>ยอดขาย 1–29 มีนาคม 2569 &nbsp;·&nbsp; 15 สาขา &nbsp;·&nbsp; ก่อนหักVAT & หลังหักVAT &nbsp;·&nbsp; รายเดือน &nbsp;·&nbsp; รายสัปดาห์</p>
   </div>
   <div class="badge-wrap">
     <span class="badge navy">GROUP 4</span>
@@ -634,6 +634,7 @@ body{font-family:'Sarabun',sans-serif;background:#eef2f7;color:#0f172a;}
             <th class="ht">MAR'26 Holding</th>
             <th>Δ MoM</th>
             <th>KPI Status</th>
+            <th>SM</th>
           </tr>
         </thead>
         <tbody id="stkBody"></tbody>
@@ -885,21 +886,21 @@ body{font-family:'Sarabun',sans-serif;background:#eef2f7;color:#0f172a;}
 <script>
 const REM=9, VAT=1.07;
 const D=[
-    {name:"Central ลาดพร้าว",         sh:"ลาดพร้าว",          tB:2247000,tA:2100000,aB:1719603, aA:1607105.61,est:2423077,feb:1504550,dift:102555.61, w1:557450,w2:585443,w3:576710,y24:1084785, y25:1436332},
-    {name:"Future Park (Flagship)",   sh:"Future Park",       tB:2247000,tA:2100000,aB:1768220.17, aA:1652542.21,est:2491583,feb:1586233,dift:66309.21, w1:558634,w2:576645,w3:632941.17,y24:905252, y25:1314161},
-    {name:"Central ชลบุรี",           sh:"ชลบุรี",            tB:1123500,tA:1050000,aB:880981, aA:823346.73,est:1241382,feb:762360,dift:60986.73, w1:299671,w2:315447,w3:265863,y24:459697, y25:642900},
-    {name:"Central นครสวรรค์",        sh:"นครสวรรค์",         tB:1177000,tA:1100000,aB:902010.6, aA:843000.56,est:1271015,feb:723952,dift:119048.56, w1:305614,w2:405168,w3:191228.6,y24:465378, y25:630117},
-    {name:"Central เชียงราย",         sh:"เชียงราย",          tB:1177000,tA:1100000,aB:817593.5, aA:764106.07,est:1152064,feb:802132,dift:-38025.93, w1:333754,w2:269102,w3:214737.5,y24:441430, y25:644170},
-    {name:"Passione ระยอง",           sh:"ระยอง",             tB:802500,tA:750000,aB:512251.5, aA:478739.72,est:721809,feb:531720,dift:-52980.28, w1:211431,w2:204668,w3:96152.5,y24:329136, y25:453243},
-    {name:"Robinson ลาดกระบัง",       sh:"ลาดกระบัง",         tB:1177000,tA:1100000,aB:835525, aA:780864.49,est:1177331,feb:792648,dift:-11783.51, w1:346325,w2:343829,w3:145371,y24:418772, y25:583707},
-    {name:"Central ลำปาง",            sh:"ลำปาง",             tB:1016500,tA:950000,aB:646192, aA:603917.76,est:910543,feb:587819,dift:16098.76, w1:262571,w2:244821,w3:138800,y24:428077, y25:604884},
-    {name:"Robinson มุกดาหาร",        sh:"มุกดาหาร",          tB:749000,tA:700000,aB:396717, aA:370763.55,est:559010,feb:451837,dift:-81073.45, w1:168757,w2:159940,w3:68020,y24:287936, y25:388754},
-    {name:"BTS หมอชิต",               sh:"BTS หมอชิต",        tB:267500,tA:250000,aB:123750, aA:115654.21,est:174375,feb:132505,dift:-16850.79, w1:53106,w2:51251,w3:19393,y24:84507, y25:128535},
-    {name:"BTS สยาม",                 sh:"BTS สยาม",          tB:321000,tA:300000,aB:193574, aA:180910.28,est:272763,feb:141972,dift:38938.28, w1:70209,w2:68421,w3:54944,y24:128292, y25:183915},
-    {name:"Robinson สมุทรปราการ",     sh:"สมุทรปราการ",       tB:963000,tA:900000,aB:606303.21, aA:566638.51,est:854336,feb:581365,dift:-14726.49, w1:278426,w2:219684,w3:108193.21,y24:0, y25:0},
-    {name:"Central พิษณุโลก",         sh:"พิษณุโลก",          tB:856000,tA:800000,aB:966448.62, aA:903223.01,est:1361814,feb:1012334,dift:-109110.99, w1:381073,w2:393601,w3:191774.62,y24:699474, y25:948732},
-    {name:"The Mall งามวงศ์วาน",      sh:"งามวงศ์วาน",        tB:1712000,tA:1600000,aB:1305111.48, aA:1219730.36,est:1839021,feb:755459,dift:464271.36, w1:305384,w2:407154,w3:592573.48,y24:778588, y25:1030427},
-    {name:"Big C ราชดำริ",            sh:"ราชดำริ",           tB:963000,tA:900000,aB:585764, aA:547442.99,est:825395,feb:602357,dift:-54914.01, w1:259876,w2:198553,w3:127335,y24:0, y25:0},
+    {name:"Central ลาดพร้าว",         sh:"ลาดพร้าว",          tB:2247000,tA:2100000,aB:2175293, aA:2032984.11,est:2173190,feb:1677978.31,dift:355005.8, w1:557450,w2:585443,w3:576710,y24:1084785, y25:1789559.81},
+    {name:"Future Park (Flagship)",   sh:"Future Park",       tB:2247000,tA:2100000,aB:2248402.17, aA:2101310.44,est:2246228,feb:1737184.47,dift:364125.97, w1:558634,w2:576645,w3:632941.17,y24:905252, y25:1647784.11},
+    {name:"Central ชลบุรี",           sh:"ชลบุรี",            tB:1123500,tA:1050000,aB:1131095, aA:1057098.13,est:1130001,feb:842200.93,dift:214897.2, w1:299671,w2:315447,w3:265863,y24:459697, y25:816438.32},
+    {name:"Central นครสวรรค์",        sh:"นครสวรรค์",         tB:1177000,tA:1100000,aB:1220725.6, aA:1140865.05,est:1219545,feb:805004.21,dift:335860.84, w1:305614,w2:405168,w3:191228.6,y24:465378, y25:803434.58},
+    {name:"Central เชียงราย",         sh:"เชียงราย",          tB:1177000,tA:1100000,aB:1074343.5, aA:1004059.35,est:1073305,feb:896728.04,dift:107331.31, w1:333754,w2:269102,w3:214737.5,y24:441430, y25:788242.06},
+    {name:"Passione ระยอง",           sh:"ระยอง",             tB:802500,tA:750000,aB:674517.5, aA:630390.19,est:673865,feb:575073.36,dift:55316.83, w1:211431,w2:204668,w3:96152.5,y24:329136, y25:592943.93},
+    {name:"Robinson ลาดกระบัง",       sh:"ลาดกระบัง",         tB:1177000,tA:1100000,aB:1072351, aA:1002197.2,est:1071314,feb:897176.64,dift:105020.56, w1:346325,w2:343829,w3:145371,y24:418772, y25:766476.64},
+    {name:"Central ลำปาง",            sh:"ลำปาง",             tB:1016500,tA:950000,aB:822991, aA:769150.47,est:822195,feb:658574.77,dift:110575.7, w1:262571,w2:244821,w3:138800,y24:428077, y25:787625.23},
+    {name:"Robinson มุกดาหาร",        sh:"มุกดาหาร",          tB:749000,tA:700000,aB:517264, aA:483424.3,est:516764,feb:506220.09,dift:-22795.79, w1:168757,w2:159940,w3:68020,y24:287936, y25:488227.1},
+    {name:"BTS หมอชิต",               sh:"BTS หมอชิต",        tB:267500,tA:250000,aB:160682, aA:150170.09,est:160527,feb:150065.42,dift:104.67, w1:53106,w2:51251,w3:19393,y24:84507, y25:163431.78},
+    {name:"BTS สยาม",                 sh:"BTS สยาม",          tB:321000,tA:300000,aB:253704, aA:237106.54,est:253459,feb:169285.98,dift:67820.56, w1:70209,w2:68421,w3:54944,y24:128292, y25:228780.84},
+    {name:"Robinson สมุทรปราการ",     sh:"สมุทรปราการ",       tB:963000,tA:900000,aB:766182.21, aA:716058.14,est:765441,feb:633389.72,dift:82668.42, w1:278426,w2:219684,w3:108193.21,y24:0, y25:0},
+    {name:"Central พิษณุโลก",         sh:"พิษณุโลก",          tB:856000,tA:800000,aB:1094744.62, aA:1023125.81,est:1093686,feb:1145145.79,dift:-122019.98, w1:381073,w2:393601,w3:191774.62,y24:699474, y25:1187014.49},
+    {name:"The Mall งามวงศ์วาน",      sh:"งามวงศ์วาน",        tB:1712000,tA:1600000,aB:1616770.48, aA:1511000.45,est:1615207,feb:823686.99,dift:687313.46, w1:305384,w2:407154,w3:592573.48,y24:778588, y25:1262420.79},
+    {name:"Big C ราชดำริ",            sh:"ราชดำริ",           tB:963000,tA:900000,aB:772809, aA:722251.4,est:772062,feb:689822.43,dift:32428.97, w1:259876,w2:198553,w3:127335,y24:0, y25:0},
 ];
 D.forEach(b=>{
   b.pct=b.aB/b.tB; b.pctA=b.aA/b.tA;
@@ -1214,21 +1215,21 @@ document.getElementById('footer1').style.display='block';
 // ── STOCK HOLDING DATA ──
 const KPI=1.0;
 const SD=[
-  {name:"Central ลาดพร้าว",       sh:"ลาดพร้าว",    qty:5119,  val:1240810, ave:1900000, feb:0.7,  mar:0.7,  dift:-0.1},
-  {name:"The Mall งามวงศ์วาน",    sh:"งามวงศ์วาน",  qty:7537,  val:1743020, ave:1300000, feb:1.1,  mar:1.3,  dift:0.3},
-  {name:"Central พิษณุโลก",       sh:"พิษณุโลก",    qty:6432,  val:1448599, ave:1200000, feb:1.4,  mar:1.2,  dift:-0.2},
-  {name:"Passione ระยอง",         sh:"ระยอง",        qty:8255,  val:1814490, ave:900000,  feb:2.0,  mar:2.0,  dift:0.0},
-  {name:"Central ลำปาง",          sh:"ลำปาง",        qty:8143,  val:1877278, ave:850000,  feb:2.1,  mar:2.2,  dift:0.1},
-  {name:"Future Park (Flagship)",  sh:"Future Park",  qty:13739, val:3005567, ave:1900000, feb:1.7,  mar:1.6,  dift:-0.2},
-  {name:"Central เชียงราย",       sh:"เชียงราย",    qty:6677,  val:1396226, ave:950000,  feb:1.6,  mar:1.5,  dift:-0.2},
-  {name:"Central ชลบุรี",         sh:"ชลบุรี",      qty:3827,  val:1939413, ave:1040000, feb:1.8,  mar:1.9,  dift:0.1},
-  {name:"BTS หมอชิต",             sh:"BTS หมอชิต",  qty:1184,  val:290180,  ave:250000,  feb:1.1,  mar:1.2,  dift:0.1},
-  {name:"BTS สยาม",               sh:"BTS สยาม",    qty:1858,  val:426480,  ave:250000,  feb:1.8,  mar:1.7,  dift:-0.1},
-  {name:"Central นครสวรรค์",      sh:"นครสวรรค์",   qty:14958, val:2398407, ave:1000000, feb:2.1,  mar:2.4,  dift:0.3},
-  {name:"Robinson ลาดกระบัง",     sh:"ลาดกระบัง",  qty:5701,  val:1249845, ave:900000,  feb:1.4,  mar:1.4,  dift:0.0},
-  {name:"Robinson มุกดาหาร",      sh:"มุกดาหาร",   qty:4450,  val:988275,  ave:675000,  feb:1.6,  mar:1.5,  dift:-0.1},
-  {name:"Robinson สมุทรปราการ",   sh:"สมุทรปราการ", qty:4549,  val:944830,  ave:1300000, feb:0.9,  mar:0.7,  dift:-0.2},
-  {name:"Big C ราชดำริ",          sh:"ราชดำริ",     qty:7031,  val:1510885, ave:1070000, feb:0.6,  mar:1.4,  dift:0.8},
+  {name:"Central ลาดพร้าว",       sh:"ลาดพร้าว",    qty:5119,  val:1240810, ave:1900000, feb:0.7,  mar:0.7,  dift:-0.1, sm:"Aum"},
+  {name:"The Mall งามวงศ์วาน",    sh:"งามวงศ์วาน",  qty:7537,  val:1743020, ave:1300000, feb:1.1,  mar:1.3,  dift:0.3, sm:"Aum"},
+  {name:"Central พิษณุโลก",       sh:"พิษณุโลก",    qty:6432,  val:1448599, ave:1200000, feb:1.4,  mar:1.2,  dift:-0.2, sm:"Toon"},
+  {name:"Passione ระยอง",         sh:"ระยอง",        qty:8255,  val:1814490, ave:900000,  feb:2.0,  mar:2.0,  dift:0.0, sm:"Bill"},
+  {name:"Central ลำปาง",          sh:"ลำปาง",        qty:8143,  val:1877278, ave:850000,  feb:2.1,  mar:2.2,  dift:0.1, sm:"Toon"},
+  {name:"Future Park (Flagship)",  sh:"Future Park",  qty:13739, val:3005567, ave:1900000, feb:1.7,  mar:1.6,  dift:-0.2, sm:"Bill"},
+  {name:"Central เชียงราย",       sh:"เชียงราย",    qty:6677,  val:1396226, ave:950000,  feb:1.6,  mar:1.5,  dift:-0.2, sm:"Toon"},
+  {name:"Central ชลบุรี",         sh:"ชลบุรี",      qty:3827,  val:1939413, ave:1040000, feb:1.8,  mar:1.9,  dift:0.1, sm:"Bill"},
+  {name:"BTS หมอชิต",             sh:"BTS หมอชิต",  qty:1184,  val:290180,  ave:250000,  feb:1.1,  mar:1.2,  dift:0.1, sm:"Toon"},
+  {name:"BTS สยาม",               sh:"BTS สยาม",    qty:1858,  val:426480,  ave:250000,  feb:1.8,  mar:1.7,  dift:-0.1, sm:"Aum"},
+  {name:"Central นครสวรรค์",      sh:"นครสวรรค์",   qty:14958, val:2398407, ave:1000000, feb:2.1,  mar:2.4,  dift:0.3, sm:"Bill"},
+  {name:"Robinson ลาดกระบัง",     sh:"ลาดกระบัง",  qty:5701,  val:1249845, ave:900000,  feb:1.4,  mar:1.4,  dift:0.0, sm:"Aum"},
+  {name:"Robinson มุกดาหาร",      sh:"มุกดาหาร",   qty:4450,  val:988275,  ave:675000,  feb:1.6,  mar:1.5,  dift:-0.1, sm:"Aum"},
+  {name:"Robinson สมุทรปราการ",   sh:"สมุทรปราการ", qty:4549,  val:944830,  ave:1300000, feb:0.9,  mar:0.7,  dift:-0.2, sm:"Aum"},
+  {name:"Big C ราชดำริ",          sh:"ราชดำริ",     qty:7031,  val:1510885, ave:1070000, feb:0.6,  mar:1.4,  dift:0.8, sm:"Toon"},
 ];
 SD.forEach(b=>{
   b.st=b.mar===null?'na':b.mar<=KPI?'pass':b.mar<=1.5?'watch':'fail';
@@ -1364,8 +1365,10 @@ function initStkCharts(){
       <td style="text-align:center;font-weight:800;color:${b.mar===null?'#94a3b8':b.st==='pass'?'#16a34a':b.st==='watch'?'#d97706':'#dc2626'};">${b.mar!==null?b.mar.toFixed(1)+'x':'–'}</td>
       <td class="${diftC}" style="text-align:center;">${diftStr}</td>
       <td style="text-align:center;">${stkTag(b.st)}</td>
+    <td style="text-align:center;font-size:11px">${b.sm||"–"}</td>
     </tr>`;
   });
+  stbl.innerHTML+='<tr style="font-weight:700;background:#f0f9ff;border-top:2px solid #0ea5e9"><td class="l" style="padding-left:8px">TOTAL / AVG</td><td style="text-align:right;font-weight:700">99,460</td><td style="text-align:right;font-weight:700">22,274,305</td><td style="text-align:right;font-weight:700">15,485,000</td><td style="text-align:center;font-weight:700">1.4x</td><td style="text-align:center;font-weight:700">1.4x</td><td style="text-align:center">0.0</td><td></td><td></td></tr>';
 }
 </script>
 
